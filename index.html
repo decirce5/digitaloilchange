@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Oil Change | Cybersecurity Self-Assessment</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --charcoal: #1a1a1a;
+            --charcoal-light: #2d2d2d;
+            --charcoal-lighter: #3d3d3d;
+            --amber: #f59e0b;
+            --amber-dark: #d97706;
+            --amber-glow: rgba(245, 158, 11, 0.15);
+            --white: #fafafa;
+            --gray: #a3a3a3;
+            --gray-dark: #737373;
+            --success: #22c55e;
+            --warning: #eab308;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Barlow', sans-serif;
+            background-color: var(--charcoal);
+            color: var(--white);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Subtle texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        header {
+            padding: 24px 0;
+            border-bottom: 1px solid var(--charcoal-lighter);
+        }
+
+        .logo {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--white);
+        }
+
+        .logo span {
+            color: var(--amber);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 80px 0 60px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 24px;
+            line-height: 1.1;
+        }
+
+        .hero h1 span {
+            color: var(--amber);
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .btn {
+            display: inline-block;
+            font-family: 'Barlow', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 16px 40px;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--amber);
+            color: var(--charcoal);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--amber-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px var(--amber-glow);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--white);
+            border: 2px solid var(--charcoal-lighter);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--amber);
+            color: var(--amber);
+        }
+
+        /* Value Props */
+        .value-props {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 32px;
+            padding: 40px 0 80px;
+            border-bottom: 1px solid var(--charcoal-lighter);
+        }
+
+        .value-prop {
+            text-align: center;
+        }
+
+        .value-prop-number {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--amber);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .value-prop-text {
+            font-size: 0.875rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Assessment Section */
+        .assessment {
+            padding: 80px 0;
+            display: none;
+        }
+
+        .assessment.active {
+            display: block;
+        }
+
+        .assessment h2 {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .assessment-intro {
+            color: var(--gray);
+            margin-bottom: 48px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background-color: var(--charcoal-lighter);
+            border-radius: 2px;
+            margin-bottom: 48px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--amber);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background-color: var(--charcoal-light);
+            border-radius: 4px;
+            padding: 40px;
+            margin-bottom: 24px;
+            border-left: 4px solid var(--amber);
+            display: none;
+        }
+
+        .question-card.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-number {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--amber);
+            margin-bottom: 12px;
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 32px;
+            line-height: 1.4;
+        }
+
+        .rating-scale {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .rating-option {
+            flex: 1;
+            text-align: center;
+        }
+
+        .rating-option input {
+            display: none;
+        }
+
+        .rating-option label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px 8px;
+            background-color: var(--charcoal);
+            border: 2px solid var(--charcoal-lighter);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .rating-option label:hover {
+            border-color: var(--amber);
+        }
+
+        .rating-option input:checked + label {
+            border-color: var(--amber);
+            background-color: var(--amber-glow);
+        }
+
+        .rating-number {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .rating-label {
+            font-size: 0.625rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray);
+        }
+
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--gray-dark);
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        .btn-nav {
+            padding: 12px 32px;
+            font-size: 0.875rem;
+        }
+
+        /* Results Section */
+        .results {
+            padding: 80px 0;
+            display: none;
+            text-align: center;
+        }
+
+        .results.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .grade-display {
+            margin-bottom: 48px;
+        }
+
+        .grade-letter {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 8rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 16px;
+        }
+
+        .grade-a { color: var(--success); }
+        .grade-b { color: #84cc16; }
+        .grade-c { color: var(--warning); }
+        .grade-d { color: #f97316; }
+        .grade-f { color: var(--danger); }
+
+        .grade-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .grade-score {
+            color: var(--gray);
+        }
+
+        .results-breakdown {
+            background-color: var(--charcoal-light);
+            border-radius: 4px;
+            padding: 40px;
+            margin-bottom: 48px;
+            text-align: left;
+        }
+
+        .results-breakdown h3 {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 24px;
+            color: var(--amber);
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--charcoal-lighter);
+        }
+
+        .breakdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-question {
+            flex: 1;
+            padding-right: 16px;
+            font-size: 0.875rem;
+        }
+
+        .breakdown-score {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            width: 40px;
+            text-align: center;
+        }
+
+        .score-low { color: var(--danger); }
+        .score-mid { color: var(--warning); }
+        .score-high { color: var(--success); }
+
+        .resources {
+            background-color: var(--charcoal-light);
+            border-radius: 4px;
+            padding: 40px;
+            margin-bottom: 48px;
+            text-align: left;
+        }
+
+        .resources h3 {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 24px;
+            color: var(--amber);
+        }
+
+        .resource-item {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--charcoal-lighter);
+        }
+
+        .resource-item:last-child {
+            border-bottom: none;
+        }
+
+        .resource-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .resource-desc {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        /* Contact Form */
+        .contact-section {
+            background-color: var(--charcoal-light);
+            border-radius: 4px;
+            padding: 48px 40px;
+            margin-bottom: 48px;
+            border-top: 4px solid var(--amber);
+        }
+
+        .contact-section h3 {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .contact-section p {
+            color: var(--gray);
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            color: var(--gray);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            background-color: var(--charcoal);
+            border: 2px solid var(--charcoal-lighter);
+            border-radius: 4px;
+            color: var(--white);
+            font-family: 'Barlow', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--amber);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-submit {
+            text-align: center;
+            margin-top: 24px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid var(--charcoal-lighter);
+            text-align: center;
+            color: var(--gray-dark);
+            font-size: 0.875rem;
+        }
+
+        /* Utility */
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 600px) {
+            .rating-scale {
+                flex-wrap: wrap;
+            }
+            
+            .rating-option {
+                flex: 0 0 calc(20% - 10px);
+            }
+
+            .rating-option label {
+                padding: 12px 4px;
+            }
+
+            .rating-label {
+                display: none;
+            }
+
+            .question-card {
+                padding: 24px;
+            }
+
+            .results-breakdown,
+            .resources,
+            .contact-section {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">Digital <span>Oil Change</span></div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="hero">
+            <div class="container">
+                <h1>Is Your Business <span>Protected</span>?</h1>
+                <p>Just like your car needs regular maintenance, your business needs routine security check-ups. Take our free 3-minute self-assessment to find out where you stand.</p>
+                <button class="btn btn-primary" onclick="startAssessment()">Start Your Assessment</button>
+            </div>
+        </section>
+
+        <!-- Value Props -->
+        <section class="value-props" id="value-props">
+            <div class="container" style="display: contents;">
+                <div class="value-prop">
+                    <div class="value-prop-number">3</div>
+                    <div class="value-prop-text">Minutes to Complete</div>
+                </div>
+                <div class="value-prop">
+                    <div class="value-prop-number">12</div>
+                    <div class="value-prop-text">Key Areas Assessed</div>
+                </div>
+                <div class="value-prop">
+                    <div class="value-prop-number">A-F</div>
+                    <div class="value-prop-text">Instant Grade</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Assessment Section -->
+        <section class="assessment" id="assessment">
+            <div class="container">
+                <h2>Security Self-Assessment</h2>
+                <p class="assessment-intro">Rate your confidence level for each area. Be honest - this is for you.</p>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+
+                <form id="assessment-form">
+                    <!-- Question 1 -->
+                    <div class="question-card active" data-question="1">
+                        <div class="question-number">Question 1 of 12</div>
+                        <div class="question-text">If an employee clicked a suspicious link right now, how confident are you that your business would be protected?</div>
+                        <div class="rating-scale">
+                            <div class="rating-option">
+                                <input type="radio" name="q1" id="q1-1" value="1" required>
+                                <label for="q1-1">
+                                    <span class="rating-number">1</span>
+                                    <span class="rating-label">Not at all</span>
+                                </label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q1" id="q1-2" value="2">
+                                <label for="q1-2">
+                                    <span class="rating-number">2</span>
+                                    <span class="rating-label">Slightly</span>
+                                </label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q1" id="q1-3" value="3">
+                                <label for="q1-3">
+                                    <span class="rating-number">3</span>
+                                    <span class="rating-label">Somewhat</span>
+                                </label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q1" id="q1-4" value="4">
+                                <label for="q1-4">
+                                    <span class="rating-number">4</span>
+                                    <span class="rating-label">Mostly</span>
+                                </label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q1" id="q1-5" value="5">
+                                <label for="q1-5">
+                                    <span class="rating-number">5</span>
+                                    <span class="rating-label">Very</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="scale-labels">
+                            <span>Not confident</span>
+                            <span>Very confident</span>
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="question-card" data-question="2">
+                        <div class="question-number">Question 2 of 12</div>
+                        <div class="question-text">How confident are you that only the right people have access to your most sensitive accounts and data?</div>
+                        <div class="rating-scale">
+                            <div class="rating-option">
+                                <input type="radio" name="q2" id="q2-1" value="1" required>
+                                <label for="q2-1"><span class="rating-number">1</span><span class="rating-label">Not at all</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q2" id="q2-2" value="2">
+                                <label for="q2-2"><span class="rating-number">2</span><span class="rating-label">Slightly</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q2" id="q2-3" value="3">
+                                <label for="q2-3"><span class="rating-number">3</span><span class="rating-label">Somewhat</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q2" id="q2-4" value="4">
+                                <label for="q2-4"><span class="rating-number">4</span><span class="rating-label">Mostly</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q2" id="q2-5" value="5">
+                                <label for="q2-5"><span class="rating-number">5</span><span class="rating-label">Very</span></label>
+                            </div>
+                        </div>
+                        <div class="scale-labels"><span>Not confident</span><span>Very confident</span></div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="question-card" data-question="3">
+                        <div class="question-number">Question 3 of 12</div>
+                        <div class="question-text">If your main computer or system died today, how confident are you that you could recover your critical files?</div>
+                        <div class="rating-scale">
+                            <div class="rating-option">
+                                <input type="radio" name="q3" id="q3-1" value="1" required>
+                                <label for="q3-1"><span class="rating-number">1</span><span class="rating-label">Not at all</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q3" id="q3-2" value="2">
+                                <label for="q3-2"><span class="rating-number">2</span><span class="rating-label">Slightly</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q3" id="q3-3" value="3">
+                                <label for="q3-3"><span class="rating-number">3</span><span class="rating-label">Somewhat</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q3" id="q3-4" value="4">
+                                <label for="q3-4"><span class="rating-number">4</span><span class="rating-label">Mostly</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q3" id="q3-5" value="5">
+                                <label for="q3-5"><span class="rating-number">5</span><span class="rating-label">Very</span></label>
+                            </div>
+                        </div>
+                        <div class="scale-labels"><span>Not confident</span><span>Very confident</span></div>
+                    </div>
+
+                    <!-- Question 4 -->
+                    <div class="question-card" data-question="4">
+                        <div class="question-number">Question 4 of 12</div>
+                        <div class="question-text">How confident are you that your team could spot a fake email pretending to be from a vendor, bank, or coworker?</div>
+                        <div class="rating-scale">
+                            <div class="rating-option">
+                                <input type="radio" name="q4" id="q4-1" value="1" required>
+                                <label for="q4-1"><span class="rating-number">1</span><span class="rating-label">Not at all</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q4" id="q4-2" value="2">
+                                <label for="q4-2"><span class="rating-number">2</span><span class="rating-label">Slightly</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q4" id="q4-3" value="3">
+                                <label for="q4-3"><span class="rating-number">3</span><span class="rating-label">Somewhat</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q4" id="q4-4" value="4">
+                                <label for="q4-4"><span class="rating-number">4</span><span class="rating-label">Mostly</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q4" id="q4-5" value="5">
+                                <label for="q4-5"><span class="rating-number">5</span><span class="rating-label">Very</span></label>
+                            </div>
+                        </div>
+                        <div class="scale-labels"><span>Not confident</span><span>Very confident</span></div>
+                    </div>
+
+                    <!-- Question 5 -->
+                    <div class="question-card" data-question="5">
+                        <div class="question-number">Question 5 of 12</div>
+                        <div class="question-text">How confident are you that your passwords on important business accounts are strong, unique, and recently updated?</div>
+                        <div class="rating-scale">
+                            <div class="rating-option">
+                                <input type="radio" name="q5" id="q5-1" value="1" required>
+                                <label for="q5-1"><span class="rating-number">1</span><span class="rating-label">Not at all</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q5" id="q5-2" value="2">
+                                <label for="q5-2"><span class="rating-number">2</span><span class="rating-label">Slightly</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q5" id="q5-3" value="3">
+                                <label for="q5-3"><span class="rating-number">3</span><span class="rating-label">Somewhat</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q5" id="q5-4" value="4">
+                                <label for="q5-4"><span class="rating-number">4</span><span class="rating-label">Mostly</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q5" id="q5-5" value="5">
+                                <label for="q5-5"><span class="rating-number">5</span><span class="rating-label">Very</span></label>
+                            </div>
+                        </div>
+                        <div class="scale-labels"><span>Not confident</span><span>Very confident</span></div>
+                    </div>
+
+                    <!-- Question 6 -->
+                    <div class="question-card" data-question="6">
+                        <div class="question-number">Question 6 of 12</div>
+                        <div class="question-text">How confident are you that the software you rely on is up to date and patched?</div>
+                        <div class="rating-scale">
+                            <div class="rating-option">
+                                <input type="radio" name="q6" id="q6-1" value="1" required>
+                                <label for="q6-1"><span class="rating-number">1</span><span class="rating-label">Not at all</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q6" id="q6-2" value="2">
+                                <label for="q6-2"><span class="rating-number">2</span><span class="rating-label">Slightly</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q6" id="q6-3" value="3">
+                                <label for="q6-3"><span class="rating-number">3</span><span class="rating-label">Somewhat</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q6" id="q6-4" value="4">
+                                <label for="q6-4"><span class="rating-number">4</span><span class="rating-label">Mostly</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q6" id="q6-5" value="5">
+                                <label for="q6-5"><span class="rating-number">5</span><span class="rating-label">Very</span></label>
+                            </div>
+                        </div>
+                        <div class="scale-labels"><span>Not confident</span><span>Very confident</span></div>
+                    </div>
+
+                    <!-- Question 7 -->
+                    <div class="question-card" data-question="7">
+                        <div class="question-number">Question 7 of 12</div>
+                        <div class="question-text">If an employee left tomorrow, how confident are you that their access would be fully removed?</div>
+                        <div class="rating-scale">
+                            <div class="rating-option">
+                                <input type="radio" name="q7" id="q7-1" value="1" required>
+                                <label for="q7-1"><span class="rating-number">1</span><span class="rating-label">Not at all</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q7" id="q7-2" value="2">
+                                <label for="q7-2"><span class="rating-number">2</span><span class="rating-label">Slightly</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q7" id="q7-3" value="3">
+                                <label for="q7-3"><span class="rating-number">3</span><span class="rating-label">Somewhat</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q7" id="q7-4" value="4">
+                                <label for="q7-4"><span class="rating-number">4</span><span class="rating-label">Mostly</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q7" id="q7-5" value="5">
+                                <label for="q7-5"><span class="rating-number">5</span><span class="rating-label">Very</span></label>
+                            </div>
+                        </div>
+                        <div class="scale-labels"><span>Not confident</span><span>Very confident</span></div>
+                    </div>
+
+                    <!-- Question 8 -->
+                    <div class="question-card" data-question="8">
+                        <div class="question-number">Question 8 of 12</div>
+                        <div class="question-text">How confident are you that you know what customer or business data you're storing and where it lives?</div>
+                        <div class="rating-scale">
+                            <div class="rating-option">
+                                <input type="radio" name="q8" id="q8-1" value="1" required>
+                                <label for="q8-1"><span class="rating-number">1</span><span class="rating-label">Not at all</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q8" id="q8-2" value="2">
+                                <label for="q8-2"><span class="rating-number">2</span><span class="rating-label">Slightly</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q8" id="q8-3" value="3">
+                                <label for="q8-3"><span class="rating-number">3</span><span class="rating-label">Somewhat</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q8" id="q8-4" value="4">
+                                <label for="q8-4"><span class="rating-number">4</span><span class="rating-label">Mostly</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q8" id="q8-5" value="5">
+                                <label for="q8-5"><span class="rating-number">5</span><span class="rating-label">Very</span></label>
+                            </div>
+                        </div>
+                        <div class="scale-labels"><span>Not confident</span><span>Very confident</span></div>
+                    </div>
+
+                    <!-- Question 9 -->
+                    <div class="question-card" data-question="9">
+                        <div class="question-number">Question 9 of 12</div>
+                        <div class="question-text">If something went wrong - a breach, a lockout, a scam - how confident are you that you'd know what to do first?</div>
+                        <div class="rating-scale">
+                            <div class="rating-option">
+                                <input type="radio" name="q9" id="q9-1" value="1" required>
+                                <label for="q9-1"><span class="rating-number">1</span><span class="rating-label">Not at all</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q9" id="q9-2" value="2">
+                                <label for="q9-2"><span class="rating-number">2</span><span class="rating-label">Slightly</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q9" id="q9-3" value="3">
+                                <label for="q9-3"><span class="rating-number">3</span><span class="rating-label">Somewhat</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q9" id="q9-4" value="4">
+                                <label for="q9-4"><span class="rating-number">4</span><span class="rating-label">Mostly</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q9" id="q9-5" value="5">
+                                <label for="q9-5"><span class="rating-number">5</span><span class="rating-label">Very</span></label>
+                            </div>
+                        </div>
+                        <div class="scale-labels"><span>Not confident</span><span>Very confident</span></div>
+                    </div>
+
+                    <!-- Question 10 -->
+                    <div class="question-card" data-question="10">
+                        <div class="question-number">Question 10 of 12</div>
+                        <div class="question-text">How confident are you that the vendors and tools you use are handling your data securely?</div>
+                        <div class="rating-scale">
+                            <div class="rating-option">
+                                <input type="radio" name="q10" id="q10-1" value="1" required>
+                                <label for="q10-1"><span class="rating-number">1</span><span class="rating-label">Not at all</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q10" id="q10-2" value="2">
+                                <label for="q10-2"><span class="rating-number">2</span><span class="rating-label">Slightly</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q10" id="q10-3" value="3">
+                                <label for="q10-3"><span class="rating-number">3</span><span class="rating-label">Somewhat</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q10" id="q10-4" value="4">
+                                <label for="q10-4"><span class="rating-number">4</span><span class="rating-label">Mostly</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q10" id="q10-5" value="5">
+                                <label for="q10-5"><span class="rating-number">5</span><span class="rating-label">Very</span></label>
+                            </div>
+                        </div>
+                        <div class="scale-labels"><span>Not confident</span><span>Very confident</span></div>
+                    </div>
+
+                    <!-- Question 11 -->
+                    <div class="question-card" data-question="11">
+                        <div class="question-number">Question 11 of 12</div>
+                        <div class="question-text">How confident are you that your Wi-Fi and network setup isn't leaving you exposed?</div>
+                        <div class="rating-scale">
+                            <div class="rating-option">
+                                <input type="radio" name="q11" id="q11-1" value="1" required>
+                                <label for="q11-1"><span class="rating-number">1</span><span class="rating-label">Not at all</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q11" id="q11-2" value="2">
+                                <label for="q11-2"><span class="rating-number">2</span><span class="rating-label">Slightly</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q11" id="q11-3" value="3">
+                                <label for="q11-3"><span class="rating-number">3</span><span class="rating-label">Somewhat</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q11" id="q11-4" value="4">
+                                <label for="q11-4"><span class="rating-number">4</span><span class="rating-label">Mostly</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q11" id="q11-5" value="5">
+                                <label for="q11-5"><span class="rating-number">5</span><span class="rating-label">Very</span></label>
+                            </div>
+                        </div>
+                        <div class="scale-labels"><span>Not confident</span><span>Very confident</span></div>
+                    </div>
+
+                    <!-- Question 12 -->
+                    <div class="question-card" data-question="12">
+                        <div class="question-number">Question 12 of 12</div>
+                        <div class="question-text">Overall, how confident are you that your business could survive a serious cyber incident without major damage?</div>
+                        <div class="rating-scale">
+                            <div class="rating-option">
+                                <input type="radio" name="q12" id="q12-1" value="1" required>
+                                <label for="q12-1"><span class="rating-number">1</span><span class="rating-label">Not at all</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q12" id="q12-2" value="2">
+                                <label for="q12-2"><span class="rating-number">2</span><span class="rating-label">Slightly</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q12" id="q12-3" value="3">
+                                <label for="q12-3"><span class="rating-number">3</span><span class="rating-label">Somewhat</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q12" id="q12-4" value="4">
+                                <label for="q12-4"><span class="rating-number">4</span><span class="rating-label">Mostly</span></label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" name="q12" id="q12-5" value="5">
+                                <label for="q12-5"><span class="rating-number">5</span><span class="rating-label">Very</span></label>
+                            </div>
+                        </div>
+                        <div class="scale-labels"><span>Not confident</span><span>Very confident</span></div>
+                    </div>
+
+                    <div class="nav-buttons">
+                        <button type="button" class="btn btn-secondary btn-nav" id="prev-btn" onclick="prevQuestion()" style="visibility: hidden;">Back</button>
+                        <button type="button" class="btn btn-primary btn-nav" id="next-btn" onclick="nextQuestion()">Next</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results" id="results">
+            <div class="container">
+                <div class="grade-display">
+                    <div class="grade-letter" id="grade-letter">-</div>
+                    <div class="grade-title" id="grade-title">-</div>
+                    <div class="grade-score" id="grade-score">-</div>
+                </div>
+
+                <div class="results-breakdown">
+                    <h3>Your Breakdown</h3>
+                    <div id="breakdown-list"></div>
+                </div>
+
+                <div class="resources">
+                    <h3>Recommended Resources</h3>
+                    <div id="resources-list"></div>
+                </div>
+
+                <div class="contact-section">
+                    <h3>Want to Talk Through Your Results?</h3>
+                    <p>No pressure, no pitch. Just a conversation about where you are and what might make sense for your business.</p>
+                    <form id="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                        <input type="hidden" name="grade" id="form-grade">
+                        <input type="hidden" name="score" id="form-score">
+                        <input type="hidden" name="answers" id="form-answers">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="business">Business Name</label>
+                            <input type="text" id="business" name="business">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Anything specific you want to discuss?</label>
+                            <textarea id="message" name="message"></textarea>
+                        </div>
+                        <div class="form-submit">
+                            <button type="submit" class="btn btn-primary">Send Message</button>
+                        </div>
+                    </form>
+                </div>
+
+                <button class="btn btn-secondary" onclick="retakeAssessment()">Retake Assessment</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Digital Oil Change - Cybersecurity made simple for small business.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Questions data for breakdown
+        const questions = [
+            "Protection from suspicious links",
+            "Access control for sensitive data",
+            "File backup and recovery",
+            "Phishing email detection",
+            "Password strength and management",
+            "Software updates and patches",
+            "Employee offboarding process",
+            "Data inventory awareness",
+            "Incident response readiness",
+            "Vendor security confidence",
+            "Network and Wi-Fi security",
+            "Overall resilience"
+        ];
+
+        // Resources by category
+        const resources = {
+            malware: {
+                title: "Protection Basics",
+                desc: "Free guide on setting up basic endpoint protection and safe browsing habits."
+            },
+            access: {
+                title: "Access Control Checklist",
+                desc: "Simple checklist for reviewing who has access to what in your business."
+            },
+            backup: {
+                title: "3-2-1 Backup Guide",
+                desc: "The industry-standard approach to backing up your critical data."
+            },
+            phishing: {
+                title: "Phishing Red Flags",
+                desc: "Train yourself and your team to spot fake emails before clicking."
+            },
+            passwords: {
+                title: "Password Manager Setup",
+                desc: "Step-by-step guide to implementing a password manager for your business."
+            },
+            updates: {
+                title: "Patch Management Basics",
+                desc: "How to keep your software updated without disrupting your workflow."
+            },
+            offboarding: {
+                title: "Employee Exit Checklist",
+                desc: "Everything you need to revoke when someone leaves your company."
+            },
+            data: {
+                title: "Data Mapping Template",
+                desc: "Simple spreadsheet to track what data you have and where it lives."
+            },
+            incident: {
+                title: "Incident Response Plan",
+                desc: "A straightforward plan for what to do when something goes wrong."
+            },
+            vendor: {
+                title: "Vendor Security Questions",
+                desc: "10 questions to ask any vendor handling your business data."
+            },
+            network: {
+                title: "Network Security Basics",
+                desc: "Quick wins for securing your Wi-Fi and network setup."
+            },
+            general: {
+                title: "Small Business Security Starter Kit",
+                desc: "Comprehensive guide covering the fundamentals of business security."
+            }
+        };
+
+        const resourceMapping = [
+            'malware', 'access', 'backup', 'phishing', 'passwords', 
+            'updates', 'offboarding', 'data', 'incident', 'vendor', 
+            'network', 'general'
+        ];
+
+        let currentQuestion = 1;
+        const totalQuestions = 12;
+        let answers = {};
+
+        function startAssessment() {
+            document.getElementById('hero').style.display = 'none';
+            document.getElementById('value-props').style.display = 'none';
+            document.getElementById('assessment').classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion - 1) / totalQuestions) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+        }
+
+        function showQuestion(num) {
+            document.querySelectorAll('.question-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.querySelector(`[data-question="${num}"]`).classList.add('active');
+            
+            document.getElementById('prev-btn').style.visibility = num === 1 ? 'hidden' : 'visible';
+            document.getElementById('next-btn').textContent = num === totalQuestions ? 'See Results' : 'Next';
+            
+            updateProgress();
+        }
+
+        function nextQuestion() {
+            const currentInput = document.querySelector(`input[name="q${currentQuestion}"]:checked`);
+            if (!currentInput) {
+                // Subtle shake animation could go here
+                return;
+            }
+            
+            answers[currentQuestion] = parseInt(currentInput.value);
+            
+            if (currentQuestion < totalQuestions) {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+            } else {
+                showResults();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 1) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+            }
+        }
+
+        function calculateGrade(score) {
+            if (score >= 48) return { letter: 'A', title: 'Strong Foundation', class: 'grade-a' };
+            if (score >= 36) return { letter: 'B', title: 'Solid Start', class: 'grade-b' };
+            if (score >= 24) return { letter: 'C', title: 'Room to Improve', class: 'grade-c' };
+            if (score >= 12) return { letter: 'D', title: 'Significant Gaps', class: 'grade-d' };
+            return { letter: 'F', title: 'Critical Attention Needed', class: 'grade-f' };
+        }
+
+        function showResults() {
+            const totalScore = Object.values(answers).reduce((a, b) => a + b, 0);
+            const grade = calculateGrade(totalScore);
+            
+            // Update grade display
+            const gradeLetter = document.getElementById('grade-letter');
+            gradeLetter.textContent = grade.letter;
+            gradeLetter.className = 'grade-letter ' + grade.class;
+            document.getElementById('grade-title').textContent = grade.title;
+            document.getElementById('grade-score').textContent = `Score: ${totalScore} out of 60`;
+            
+            // Build breakdown
+            const breakdownList = document.getElementById('breakdown-list');
+            breakdownList.innerHTML = '';
+            for (let i = 1; i <= totalQuestions; i++) {
+                const score = answers[i];
+                let scoreClass = 'score-mid';
+                if (score <= 2) scoreClass = 'score-low';
+                if (score >= 4) scoreClass = 'score-high';
+                
+                breakdownList.innerHTML += `
+                    <div class="breakdown-item">
+                        <span class="breakdown-question">${questions[i-1]}</span>
+                        <span class="breakdown-score ${scoreClass}">${score}/5</span>
+                    </div>
+                `;
+            }
+            
+            // Build resources (show resources for weak areas)
+            const resourcesList = document.getElementById('resources-list');
+            resourcesList.innerHTML = '';
+            const weakAreas = Object.entries(answers)
+                .filter(([_, score]) => score <= 3)
+                .sort((a, b) => a[1] - b[1])
+                .slice(0, 4);
+            
+            if (weakAreas.length === 0) {
+                resourcesList.innerHTML = `
+                    <div class="resource-item">
+                        <div class="resource-title">Great job!</div>
+                        <div class="resource-desc">Your confidence levels are solid across the board. Consider scheduling a quick check-in to validate your security posture and identify any blind spots.</div>
+                    </div>
+                `;
+            } else {
+                weakAreas.forEach(([qNum, _]) => {
+                    const resourceKey = resourceMapping[parseInt(qNum) - 1];
+                    const resource = resources[resourceKey];
+                    resourcesList.innerHTML += `
+                        <div class="resource-item">
+                            <div class="resource-title">${resource.title}</div>
+                            <div class="resource-desc">${resource.desc}</div>
+                        </div>
+                    `;
+                });
+            }
+            
+            // Set hidden form fields
+            document.getElementById('form-grade').value = grade.letter;
+            document.getElementById('form-score').value = totalScore;
+            document.getElementById('form-answers').value = JSON.stringify(answers);
+            
+            // Show results
+            document.getElementById('assessment').classList.remove('active');
+            document.getElementById('results').classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function retakeAssessment() {
+            currentQuestion = 1;
+            answers = {};
+            
+            // Reset form
+            document.getElementById('assessment-form').reset();
+            
+            // Hide results, show assessment
+            document.getElementById('results').classList.remove('active');
+            document.getElementById('assessment').classList.add('active');
+            showQuestion(1);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html>
